@@ -8,7 +8,8 @@ class Server{
 
         this.app = express();
         this.port =  process.env.PORT;
-        this.usuariosPath = '/api/usuarios'
+        this.usuariosPath = '/api/usuarios';
+        this.authPath     = '/api/auth';
 
 
         // Conectar a base de datos
@@ -27,17 +28,19 @@ class Server{
 
     middlewares(){
         //Directorio Público
-
-        this.app.use(express.static('public'));
-        this.app.use(express.json()); // se necesita para leer body de json
         this.app.use(cors());
+        this.app.use(express.json()); // se necesita para leer body de json
+        this.app.use(express.static('public'));
+        
 
     }
 
 
     routes(){
-
+        
+        this.app.use(this.authPath, require('../routes/auth'));
         this.app.use(this.usuariosPath, require('../routes/usuarios'));
+       
 
     }
 
